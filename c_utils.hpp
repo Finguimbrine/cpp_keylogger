@@ -83,4 +83,24 @@ namespace c_utils {
 		}
 	}
 
+	inline std::string pc_username() {
+		char username_buffer[256];
+		DWORD buf_len = 256;
+
+		GetUserNameA(username_buffer, &buf_len);
+
+		return username_buffer;
+	}
+
+	inline std::string time_now() {
+		std::tm tmn;
+		char time_buffer[10];
+		std::time_t tmt = std::time(0);
+
+		localtime_s(&tmn, &tmt);
+		std::strftime(time_buffer, 10, c_xor("%H:%M:%S"), &tmn);
+
+		return time_buffer;
+	}
+
 }

